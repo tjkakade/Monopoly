@@ -64,20 +64,20 @@ int propertyvalues[40][10] = {{0,0,0,0,0,0,0,0,0},                              
                               {39,400, 200, 50, 200, 600, 1400, 1700, 2000, 200}};    //boardwalk
 
 
-//PLAYER
+
+
+//CLASS PLAYER
 class Player{
 protected:
     int balance = 0;
     string name;
     int location = 0;
 
-
 public:
-    Player (string n) {
+    Player (string n) { // default constructor
         balance = 1500;
         name = n;
         location = 0;
-
     }
 
     virtual int getSpace() = 0;                 // get player location
@@ -85,69 +85,61 @@ public:
     virtual int getbal() = 0;                   // get player balance
     virtual bool getreal() = 0;                 // check if player is a computer or not
     virtual void roll() = 0;                    // roll the dice for the player
-    virtual void debit(int value) = 0;
-    virtual void deposit(int value) = 0;
-    virtual void move_player(int new_loc) = 0;             // change the players location if changed by a card
-    virtual bool getBankrupt() = 0;
-    virtual void setBankrupt(bool val) = 0;
-    virtual bool getstatus() = 0;
-    virtual void setstatus(bool a) = 0;
+    virtual void debit(int value) = 0;          // debit player
+    virtual void deposit(int value) = 0;        // deposit money into player account
+    virtual void move_player(int new_loc) = 0;  // change the players location if changed by a card
+    virtual bool getBankrupt() = 0;             // bankrupt?
+    virtual void setBankrupt(bool val) = 0;     // set if bankrupt
+    virtual bool getstatus() = 0;               // is game over?
+    virtual void setstatus(bool a) = 0;         // set game status
 };
 
-//Console Player
-class Console_Player: public Player {
+
+
+
+//USER PLAYER
+class Console_Player: public Player { // derived class
 protected:
     bool real;
     bool bankrupt;
     bool status;
+  
 public:
-
-    Console_Player(string n): Player(n) {
+    Console_Player(string n): Player(n) { // derived constructor for user player
         real = true;
         bankrupt = false;
         status = true;
     }
 
-    // get the location of the player
-    virtual int getSpace(){
+    virtual int getSpace(){ // get the location of the player
         return location;
     }
 
-    // get the player's name
-    virtual string getname() {
+    virtual string getname() { // get the player's name
         return name;
     }
 
-    // check player's balance
-    virtual int getbal() {
+    virtual int getbal() { // check player's balance
         return balance;
     }
 
-    // check if player is a computer or not.
-    virtual bool getreal() {
+    virtual bool getreal() { // check if player is a computer or not.
         return real;
     }
 
-    virtual bool getstatus(){
+    virtual bool getstatus(){ // get status
         return status;
     }
 
-    virtual void setstatus(bool a){
+    virtual void setstatus(bool a){ // set what the status is
         status = a;
     }
 
-    // roll the dice and move the player for that turn
-    virtual void roll() {
+    virtual void roll() { // roll the dice and move the player for that turn
         int dice1, dice2;
 
-        //srand(time(0));        //initialize number generator
         dice1 = rand() % 6 + 1;
         dice2 = rand() % 6 + 1;
-
-        /* if ((dice1 == dice2) && (getSpace() == 30))   //getspace would need to reference a player passed to roll function
-         //get out of jail
-         else if (dice1 == dice2)
-             roll();*/
 
         location += dice1 + dice2;
         if(location >= 40){
@@ -158,29 +150,24 @@ public:
 
     // function to remove money from a player's balance, used in transfer and for chance/community chest cards.
     virtual void debit(int money) {
-
         balance -= money;
-
         return;
     }
+    
     // function to deposit money into a players balance
     virtual void deposit(int money) {
-
         balance += money;
         return;
     }
 
     // move the player to a new location as determined by a chance or community chest card
     virtual void move_player(int new_location) {
-
         // if the player has already passed the location then they must pass GO to get to that location again.
         if(new_location == 10) {
-
             if(new_location < location) {
                 balance += 200;
             }
         }
-
         location = new_location;
     }
 
@@ -193,8 +180,11 @@ public:
     }
 };
 
-// CPU Player
-class CPU_Player: public Console_Player {
+
+
+
+//CPU PLAYER 
+class CPU_Player: public Console_Player { // derrive auto class
 public:
     CPU_Player(string n): Console_Player(n) {
         real = false;
@@ -202,7 +192,7 @@ public:
     }
 };
 
-int dice_roll () {
+int dice_roll () { // rolls dice, non-class function
     int roll;
     int roll1;
     int roll2;
@@ -212,17 +202,23 @@ int dice_roll () {
     return roll;
 }
 
-//SPACE
+
+
+
+//BOARD SPACE
 class space{
 public:
-    string sname;            //name of space, ex:boardwalk
-    bool available;         //available to purchase property?
+    string sname;     // name of space, ex:boardwalk
+    bool available;   // available to purchase property?
     int numhouses;
     int numhotels;
     Player * owner;
 };
 
 
+
+
+//GAME BOARD
 class board{
 private:
     space b[40];              //40 spaces that make up board
@@ -237,6 +233,7 @@ public:
             b[i].numhotels = 0;
         }
     }
+  
     void checkspace(Player * p){  //check what to do on the space
         int currspace = p->getSpace();
         cout<< "You landed on " << spacename[currspace] << endl;
@@ -293,7 +290,7 @@ public:
         }
     }
 
-    void printboard(){
+    void printboard(){ //output board
         ofstream op;
         op.open("board.txt");
         //header for board stats
@@ -343,7 +340,7 @@ public:
     }
 
     void communitychest(Player * p){
-        switch(rand()%5){
+        switch(rand()%5) {
             case 0: {
                 cout<< "Bank error in your favor +$20" <<endl;
                 p->deposit(20);
@@ -495,9 +492,9 @@ public:
 
 
 
+//MAIN
 int main() {
-
-    srand(time(0));
+    srand(time(0)); // init time for RNG
     board b;
     int pSize=10;
     int cpuSize=10;
@@ -540,8 +537,6 @@ int main() {
     if(cpuSize>5){CPU_Player * l = new CPU_Player (cpuNames[5]); allplayers.push_back(l);}
     if(cpuSize>6){CPU_Player * m = new CPU_Player (cpuNames[6]); allplayers.push_back(m);}
     if(cpuSize>7){CPU_Player * n = new CPU_Player (cpuNames[7]); allplayers.push_back(n);}
-
-    //need to fix cpu player
 
     bool status = false;
 
