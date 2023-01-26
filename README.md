@@ -1,5 +1,5 @@
-# MonopolyECE309
-Final project for ECE 309, implementation for monopoly game in C++
+# Monopoly
+Monopoly game implementation project.
 
 ## Game Description
 This project models the board game monopoly. Monopoly is a board game that can have up to 8 players, where the goal of the game is to travel around the board
