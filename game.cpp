@@ -64,434 +64,434 @@ int propertyvalues[40][10] = {{0,0,0,0,0,0,0,0,0},                              
                               {39,400, 200, 50, 200, 600, 1400, 1700, 2000, 200}};    //boardwalk
 
 
-                              //PLAYER
-                              class Player{
-                              protected:
-                                  int balance = 0;
-                                  string name;
-                                  int location = 0;
+//PLAYER
+      class Player{
+      protected:
+	  int balance = 0;
+	  string name;
+	  int location = 0;
 
 
-                              public:
-                                  Player (string n) {
-                                      balance = 1500;
-                                      name = n;
-                                      location = 0;
+      public:
+	  Player (string n) {
+	      balance = 1500;
+	      name = n;
+	      location = 0;
 
-                                  }
+	  }
 
-                                  virtual int getSpace() = 0;                 // get player location
-                                  virtual string getname() = 0;               // get player name
-                                  virtual int getbal() = 0;                   // get player balance
-                                  virtual bool getreal() = 0;                 // check if player is a computer or not
-                                  virtual void roll() = 0;                    // roll the dice for the player
-                                  virtual void debit(int value) = 0;
-                                  virtual void deposit(int value) = 0;
-                                  virtual void move_player(int new_loc) = 0;             // change the players location if changed by a card
-                                  virtual bool getBankrupt() = 0;
-                                  virtual void setBankrupt(bool val) = 0;
-                                  virtual bool getstatus() = 0;
-                                  virtual void setstatus(bool a) = 0;
-                              };
+	  virtual int getSpace() = 0;                 // get player location
+	  virtual string getname() = 0;               // get player name
+	  virtual int getbal() = 0;                   // get player balance
+	  virtual bool getreal() = 0;                 // check if player is a computer or not
+	  virtual void roll() = 0;                    // roll the dice for the player
+	  virtual void debit(int value) = 0;
+	  virtual void deposit(int value) = 0;
+	  virtual void move_player(int new_loc) = 0;             // change the players location if changed by a card
+	  virtual bool getBankrupt() = 0;
+	  virtual void setBankrupt(bool val) = 0;
+	  virtual bool getstatus() = 0;
+	  virtual void setstatus(bool a) = 0;
+      };
 
-                              //Console Player
-                              class Console_Player: public Player {
-                              protected:
-                                  bool real;
-                                  bool bankrupt;
-                                  bool status;
-                              public:
+      //Console Player
+      class Console_Player: public Player {
+      protected:
+	  bool real;
+	  bool bankrupt;
+	  bool status;
+      public:
 
-                                  Console_Player(string n): Player(n) {
-                                      real = true;
-                                      bankrupt = false;
-                                      status = true;
-                                  }
+	  Console_Player(string n): Player(n) {
+	      real = true;
+	      bankrupt = false;
+	      status = true;
+	  }
 
-                                  // get the location of the player
-                                  virtual int getSpace(){
-                                      return location;
-                                  }
+	  // get the location of the player
+	  virtual int getSpace(){
+	      return location;
+	  }
 
-                                  // get the player's name
-                                  virtual string getname() {
-                                      return name;
-                                  }
+	  // get the player's name
+	  virtual string getname() {
+	      return name;
+	  }
 
-                                  // check player's balance
-                                  virtual int getbal() {
-                                      return balance;
-                                  }
+	  // check player's balance
+	  virtual int getbal() {
+	      return balance;
+	  }
 
-                                  // check if player is a computer or not.
-                                  virtual bool getreal() {
-                                      return real;
-                                  }
+	  // check if player is a computer or not.
+	  virtual bool getreal() {
+	      return real;
+	  }
 
-                                  virtual bool getstatus(){
-                                      return status;
-                                  }
+	  virtual bool getstatus(){
+	      return status;
+	  }
 
-                                  virtual void setstatus(bool a){
-                                      status = a;
-                                  }
+	  virtual void setstatus(bool a){
+	      status = a;
+	  }
 
-                                  // roll the dice and move the player for that turn
-                                  virtual void roll() {
-                                      int dice1, dice2;
+	  // roll the dice and move the player for that turn
+	  virtual void roll() {
+	      int dice1, dice2;
 
-                                      //srand(time(0));        //initialize number generator
-                                      dice1 = rand() % 6 + 1;
-                                      dice2 = rand() % 6 + 1;
+	      //srand(time(0));        //initialize number generator
+	      dice1 = rand() % 6 + 1;
+	      dice2 = rand() % 6 + 1;
 
-                                      /* if ((dice1 == dice2) && (getSpace() == 30))   //getspace would need to reference a player passed to roll function
-                                           //get out of jail
-                                           else if (dice1 == dice2)
-                                               roll();*/
+	      /* if ((dice1 == dice2) && (getSpace() == 30))   //getspace would need to reference a player passed to roll function
+		   //get out of jail
+		   else if (dice1 == dice2)
+		       roll();*/
 
-                                      location += dice1 + dice2;
-                                      if(location >= 40){
-                                          location-=40;
-                                          balance += 200;
-                                      }
-                                  }
+	      location += dice1 + dice2;
+	      if(location >= 40){
+		  location-=40;
+		  balance += 200;
+	      }
+	  }
 
-                                  // function to remove money from a player's balance, used in transfer and for chance/community chest cards.
-                                  virtual void debit(int money) {
+	  // function to remove money from a player's balance, used in transfer and for chance/community chest cards.
+	  virtual void debit(int money) {
 
-                                      balance -= money;
+	      balance -= money;
 
-                                      return;
-                                  }
-                                  // function to deposit money into a players balance
-                                  virtual void deposit(int money) {
+	      return;
+	  }
+	  // function to deposit money into a players balance
+	  virtual void deposit(int money) {
 
-                                      balance += money;
-                                      return;
-                                  }
+	      balance += money;
+	      return;
+	  }
 
-                                  // move the player to a new location as determined by a chance or community chest card
-                                  virtual void move_player(int new_location) {
+	  // move the player to a new location as determined by a chance or community chest card
+	  virtual void move_player(int new_location) {
 
-                                      // if the player has already passed the location then they must pass GO to get to that location again.
-                                      if(new_location == 10) {
+	      // if the player has already passed the location then they must pass GO to get to that location again.
+	      if(new_location == 10) {
 
-                                          if(new_location < location) {
-                                              balance += 200;
-                                          }
-                                      }
+		  if(new_location < location) {
+		      balance += 200;
+		  }
+	      }
 
-                                      location = new_location;
-                                  }
+	      location = new_location;
+	  }
 
-                                  virtual bool getBankrupt() {
-                                      return bankrupt;
-                                  }
+	  virtual bool getBankrupt() {
+	      return bankrupt;
+	  }
 
-                                  virtual void setBankrupt(bool val) {
-                                      bankrupt = val;
-                                  }
-                              };
+	  virtual void setBankrupt(bool val) {
+	      bankrupt = val;
+	  }
+      };
 
-                              // CPU Player
-                              class CPU_Player: public Console_Player {
-                              public:
-                                  CPU_Player(string n): Console_Player(n) {
-                                      real = false;
-                                      bankrupt = false;
-                                  }
-                              };
+      // CPU Player
+      class CPU_Player: public Console_Player {
+      public:
+	  CPU_Player(string n): Console_Player(n) {
+	      real = false;
+	      bankrupt = false;
+	  }
+      };
 
-                              int dice_roll () {
-                                  int roll;
-                                  int roll1;
-                                  int roll2;
-                                  roll1 = rand() % 6 + 1;
-                                  roll2 = rand() % 6 + 1;
-                                  roll = roll1 + roll2;
-                                  return roll;
-                              }
+      int dice_roll () {
+	  int roll;
+	  int roll1;
+	  int roll2;
+	  roll1 = rand() % 6 + 1;
+	  roll2 = rand() % 6 + 1;
+	  roll = roll1 + roll2;
+	  return roll;
+      }
 
-                              //SPACE
-                              class space{
-                              public:
-                                  string sname;            //name of space, ex:boardwalk
-                                  bool available;         //available to purchase property?
-                                  int numhouses;
-                                  int numhotels;
-                                  Player * owner;
-                              };
+      //SPACE
+      class space{
+      public:
+	  string sname;            //name of space, ex:boardwalk
+	  bool available;         //available to purchase property?
+	  int numhouses;
+	  int numhotels;
+	  Player * owner;
+      };
 
 
-                              class board{
-                              private:
-                                  space b[40];              //40 spaces that make up board
-                              public:
-                                  board(){
-                                      for(int i = 0; i<40; i++){
-                                          b[i].sname = spacename[i];
-                                          if(propertyvalues[i][price] > 0)b[i].available = true;
-                                          else b[i].available = false;
-                                          b[i].owner = nullptr;
-                                          b[i].numhouses = 0;
-                                          b[i].numhotels = 0;
-                                      }
-                                  }
-                                  void checkspace(Player * p){  //check what to do on the space
-                                      int currspace = p->getSpace();
-                                      cout<< "You landed on " << spacename[currspace] << endl;
-                                      if(propertyvalues[currspace][price] == 0){ //special spaces
-                                          //community chest
-                                          if((currspace == 2) || (currspace == 17) || (currspace == 33)){
-                                              cout << "Community chest!" <<endl;
-                                              communitychest(p);
-                                          }
-                                          //chance
-                                          if((currspace == 7) || (currspace == 22) || (currspace == 36)){
-                                              cout << "Chance!" <<endl;
-                                              chance(p);
-                                          }
-                                          //special spaces
-                                          //income tax 4
-                                          if(currspace == 4){
-                                              cout << "Income tax, pay $200" <<endl;
-                                              p->debit(200);
-                                          }
-                                          //go to jail 30
-                                          if(currspace == 30){
-                                              cout << "Go to jail, pay $100 fine" <<endl;
-                                              move(30);
-                                              p->debit(100);
-                                          }
-                                          //luxury tax 38
-                                          if(currspace == 38){
-                                              cout << "Luxury tax, pay $75" <<endl;
-                                              p->debit(75);
-                                          }
-                                      }
-                                      else{
-                                          if(b[currspace].available){   //space is available to purchase
-                                              if(p->getreal()){
-                                                  char answer;
-                                                  cout<<"Would you like to buy "<< spacename[currspace] << " for $" << propertyvalues[currspace][price] << "? respond Y or N" << endl;
-                                                  cin >> answer;
-                                                  if(answer == 'Y')buyspace(currspace, p);
-                                                  else return;
-                                              }
-                                              else{ //cpu decision
-                                                  if(p->getbal() >= (propertyvalues[currspace][price] / 3)) buyspace(currspace, p);
-                                                  else return;
-                                              }
-                                          }
-                                          else{
-                                              //railroad or utilities
-                                              if((currspace == 12) || (currspace == 28) || (currspace == 5) || (currspace == 15) || (currspace == 25) || (currspace == 35))payUtilities(currspace,p);
-                                              else{
-                                                  payRent(currspace, p);
-                                              }
-                                          }
-                                      }
-                                  }
+      class board{
+      private:
+	  space b[40];              //40 spaces that make up board
+      public:
+	  board(){
+	      for(int i = 0; i<40; i++){
+		  b[i].sname = spacename[i];
+		  if(propertyvalues[i][price] > 0)b[i].available = true;
+		  else b[i].available = false;
+		  b[i].owner = nullptr;
+		  b[i].numhouses = 0;
+		  b[i].numhotels = 0;
+	      }
+	  }
+	  void checkspace(Player * p){  //check what to do on the space
+	      int currspace = p->getSpace();
+	      cout<< "You landed on " << spacename[currspace] << endl;
+	      if(propertyvalues[currspace][price] == 0){ //special spaces
+		  //community chest
+		  if((currspace == 2) || (currspace == 17) || (currspace == 33)){
+		      cout << "Community chest!" <<endl;
+		      communitychest(p);
+		  }
+		  //chance
+		  if((currspace == 7) || (currspace == 22) || (currspace == 36)){
+		      cout << "Chance!" <<endl;
+		      chance(p);
+		  }
+		  //special spaces
+		  //income tax 4
+		  if(currspace == 4){
+		      cout << "Income tax, pay $200" <<endl;
+		      p->debit(200);
+		  }
+		  //go to jail 30
+		  if(currspace == 30){
+		      cout << "Go to jail, pay $100 fine" <<endl;
+		      move(30);
+		      p->debit(100);
+		  }
+		  //luxury tax 38
+		  if(currspace == 38){
+		      cout << "Luxury tax, pay $75" <<endl;
+		      p->debit(75);
+		  }
+	      }
+	      else{
+		  if(b[currspace].available){   //space is available to purchase
+		      if(p->getreal()){
+			  char answer;
+			  cout<<"Would you like to buy "<< spacename[currspace] << " for $" << propertyvalues[currspace][price] << "? respond Y or N" << endl;
+			  cin >> answer;
+			  if(answer == 'Y')buyspace(currspace, p);
+			  else return;
+		      }
+		      else{ //cpu decision
+			  if(p->getbal() >= (propertyvalues[currspace][price] / 3)) buyspace(currspace, p);
+			  else return;
+		      }
+		  }
+		  else{
+		      //railroad or utilities
+		      if((currspace == 12) || (currspace == 28) || (currspace == 5) || (currspace == 15) || (currspace == 25) || (currspace == 35))payUtilities(currspace,p);
+		      else{
+			  payRent(currspace, p);
+		      }
+		  }
+	      }
+	  }
 
-                                  void printboard(){
-                                      ofstream op;
-                                      op.open("board.txt");
-                                      //header for board stats
-                    op<<"		Board Information		"<<endl;
-                                      for(int i=0; i<40; i++){
-                                          //space number, space name, space value, space owner
-                                          op<<i+1<<" Owner: ";
-                                          if(b[i].owner == nullptr) op << " None";
-                                          else op << b[i].owner->getname();
-                                          op<< " Space: " << b[i].sname;
-                      if(propertyvalues[i][1]>0) op << " Value:" << propertyvalues[i][1] <<endl;
-                      else op<<endl;
-                                      }
-                                      op.close();
-                                  }
+	  void printboard(){
+	      ofstream op;
+	      op.open("board.txt");
+	      //header for board stats
+op<<"		Board Information		"<<endl;
+	      for(int i=0; i<40; i++){
+		  //space number, space name, space value, space owner
+		  op<<i+1<<" Owner: ";
+		  if(b[i].owner == nullptr) op << " None";
+		  else op << b[i].owner->getname();
+		  op<< " Space: " << b[i].sname;
+if(propertyvalues[i][1]>0) op << " Value:" << propertyvalues[i][1] <<endl;
+else op<<endl;
+	      }
+	      op.close();
+	  }
 
-                                  //player chooses to buy space
-                                  void buyspace(int s, Player * p){
-                                      //arguments will need to be added to check if player has the funds and then debt them
-                                      //b[s].owner = p;
-                                      p->debit(propertyvalues[s][price]);
-                                      b[s].available = false;
-                                      b[s].owner = p;
-                                  }
+	  //player chooses to buy space
+	  void buyspace(int s, Player * p){
+	      //arguments will need to be added to check if player has the funds and then debt them
+	      //b[s].owner = p;
+	      p->debit(propertyvalues[s][price]);
+	      b[s].available = false;
+	      b[s].owner = p;
+	  }
 
-                                  //player's balance is negative and must sell all properties
-                                  void liquidate(Player * p){
-                                      for(int i = 0; i<40; i++){
-                                          if(b[i].owner == p){
-                                              p->deposit(propertyvalues[i][mortgage]);
-                                              b[i].owner = nullptr;
-                                              b[i].available = true;
-                                          }
-                                      }
-                                  }
+	  //player's balance is negative and must sell all properties
+	  void liquidate(Player * p){
+	      for(int i = 0; i<40; i++){
+		  if(b[i].owner == p){
+		      p->deposit(propertyvalues[i][mortgage]);
+		      b[i].owner = nullptr;
+		      b[i].available = true;
+		  }
+	      }
+	  }
 
-                                  //player lands on an owned space and must pay rent
-                                  void payRent(int s, Player * p){
-                                      int rentamt = 0;
-                                      //if numhouses = 0, get propertyvalue[s][3], 1 house [s][4]
-                                      rentamt = propertyvalues[s][b[s].numhouses+3];
-                                      //override if there is a hotel
-                                      if(b[s].numhotels == 1) rentamt = propertyvalues[s][rent5];
-                                      p->debit(rentamt);
-                                      cout << "You paid " << rentamt <<" in rent." <<endl;
-                                      b[s].owner->deposit(rentamt);
-                                  }
+	  //player lands on an owned space and must pay rent
+	  void payRent(int s, Player * p){
+	      int rentamt = 0;
+	      //if numhouses = 0, get propertyvalue[s][3], 1 house [s][4]
+	      rentamt = propertyvalues[s][b[s].numhouses+3];
+	      //override if there is a hotel
+	      if(b[s].numhotels == 1) rentamt = propertyvalues[s][rent5];
+	      p->debit(rentamt);
+	      cout << "You paid " << rentamt <<" in rent." <<endl;
+	      b[s].owner->deposit(rentamt);
+	  }
 
-                                  void communitychest(Player * p){
-                                      switch(rand()%5){
-                                          case 0: {
-                                              cout<< "Bank error in your favor +$20" <<endl;
-                                              p->deposit(20);
-                                              return;
-                                          }
-                                          case 1: {
-                                              cout<< "Doctor's fees, pay $50" <<endl;
-                                              p->debit(50);
-                                              return;
-                                          }
-                                          case 2: {cout<< "Income tax return +$20" <<endl;
-                                              p->deposit(20);
-                                              return;
-                                          }
-                                          case 3: {
-                                              cout<< "School fees, pay $50" <<endl;
-                                              p->debit(50);
-                                              return;
-                                          }
-                                          case 4: {cout<< "Stock sold +$50" <<endl;
-                                              p->deposit(50);
-                                              return;
-                                          }
-                                          default: return;
-                                      }
-                                  }
+	  void communitychest(Player * p){
+	      switch(rand()%5){
+		  case 0: {
+		      cout<< "Bank error in your favor +$20" <<endl;
+		      p->deposit(20);
+		      return;
+		  }
+		  case 1: {
+		      cout<< "Doctor's fees, pay $50" <<endl;
+		      p->debit(50);
+		      return;
+		  }
+		  case 2: {cout<< "Income tax return +$20" <<endl;
+		      p->deposit(20);
+		      return;
+		  }
+		  case 3: {
+		      cout<< "School fees, pay $50" <<endl;
+		      p->debit(50);
+		      return;
+		  }
+		  case 4: {cout<< "Stock sold +$50" <<endl;
+		      p->deposit(50);
+		      return;
+		  }
+		  default: return;
+	      }
+	  }
 
-                                  void chance(Player * p){
-                                      switch(rand()%5){
-                                          case 0: {
-                                              cout<< "Advance to Go, collect $200" <<endl;
-                                              move(0);
-                                              return;
-                                          }
-                                          case 1: {
-                                              cout<< "Advance to St. Charles Place" <<endl;
-                                              move(11);
-                                              return;
-                                          }
-                                          case 2: {cout<< "Advance to Boardwalk" <<endl;
-                                              move(39);
-                                              return;
-                                          }
-                                          case 3: {cout<< "Advance to Illinois Ave" <<endl;
-                                              move(24);
-                                              return;
-                                          }
-                                          case 4: {cout<< "Go directly to jail" <<endl;
-                                              move(10);
-                                              return;
-                                          }
-                                          case 5: {cout<< "Advance to Reading Railroad" <<endl;
-                                              move(5);
-                                              return;
-                                          }
-                                          case 6: {cout<< "Your building and loan matures, collect $150" <<endl;
-                                              p->deposit(150);
-                                              return;
-                                          }
-                                          case 7: {cout<< "Bank pays you dividend of $50" <<endl;
-                                              p->deposit(50);
-                                              return;
-                                          }
-                                          case 8: return;
-                                          case 9: {cout<< "Pay poor tax of $15" <<endl;
-                                              p->debit(15);
-                                              return;
-                                          }
-                                          case 10: {cout<< "Go back 3 spaces" <<endl;
-                                              int currspace = p->getSpace();
-                                              move(currspace-3);
-                                              return;
-                                          }
-                                          default: return;
-                                      }
-                                  }
+	  void chance(Player * p){
+	      switch(rand()%5){
+		  case 0: {
+		      cout<< "Advance to Go, collect $200" <<endl;
+		      move(0);
+		      return;
+		  }
+		  case 1: {
+		      cout<< "Advance to St. Charles Place" <<endl;
+		      move(11);
+		      return;
+		  }
+		  case 2: {cout<< "Advance to Boardwalk" <<endl;
+		      move(39);
+		      return;
+		  }
+		  case 3: {cout<< "Advance to Illinois Ave" <<endl;
+		      move(24);
+		      return;
+		  }
+		  case 4: {cout<< "Go directly to jail" <<endl;
+		      move(10);
+		      return;
+		  }
+		  case 5: {cout<< "Advance to Reading Railroad" <<endl;
+		      move(5);
+		      return;
+		  }
+		  case 6: {cout<< "Your building and loan matures, collect $150" <<endl;
+		      p->deposit(150);
+		      return;
+		  }
+		  case 7: {cout<< "Bank pays you dividend of $50" <<endl;
+		      p->deposit(50);
+		      return;
+		  }
+		  case 8: return;
+		  case 9: {cout<< "Pay poor tax of $15" <<endl;
+		      p->debit(15);
+		      return;
+		  }
+		  case 10: {cout<< "Go back 3 spaces" <<endl;
+		      int currspace = p->getSpace();
+		      move(currspace-3);
+		      return;
+		  }
+		  default: return;
+	      }
+	  }
 
-                                  //player chooses to buy property
-                                  void buyhouses(Player * p){
-                                      char answer;
-                                      if(p->getreal()){
-                                      cout<<"Would you like to buy a house for any space? Enter Y or N" <<endl;
-                                      cin >> answer;
-                                      if(answer == 'Y'){
-                                          for(int i = 0; i<40; i++){
-                                              if(b[i].owner == p){
-                                                  int h = 0;                          //num houses to buy
-                                                  int hp = propertyvalues[i][hprice]; //house price per
-                                                  if(hp != 0){
-                                                  cout<<"How many houses would you like to buy for " << b[i].sname << "for $" << hp << endl;
-                                                  cout<<"Enter a number 0-5, with 5 as a hotel." <<endl;
-                                                  cin >> h;
-                                                  p->debit(hp*h);
-                                                  b[i].numhouses += h;
-                                                  if(b[i].numhouses > 4){
-                                                      b[i].numhouses = 0;
-                                                      b[i].numhotels = 1;
-                                                  }
-                                                  }
-                                              }
-                                          }
-                                      }
-                                      }
-                                      else{
-                                          //cpufunction
-                                          for(int i = 0; i<40; i++){
-                                              if(b[i].owner == p){
-                                                  int h = 0;                          //num houses to buy
-                                                  int hp = propertyvalues[i][hprice]; //house price per
-                                                  if(hp != 0){
-                                                      if(p->getbal() >= 5*hp){h = 1;
-                                                          p->debit(hp*h);
-                                                          cout<<p->getname()<<" bought a house"<<endl;
-                                                          b[i].numhouses += h;
-                                                          if(b[i].numhouses > 4){
-                                                              b[i].numhouses = 0;
-                                                              b[i].numhotels = 1;}
-                                                      }
-                                                  }
-                                              }
-                                          }
-                                      }
-                                      return;
-                                  }
+	  //player chooses to buy property
+	  void buyhouses(Player * p){
+	      char answer;
+	      if(p->getreal()){
+	      cout<<"Would you like to buy a house for any space? Enter Y or N" <<endl;
+	      cin >> answer;
+	      if(answer == 'Y'){
+		  for(int i = 0; i<40; i++){
+		      if(b[i].owner == p){
+			  int h = 0;                          //num houses to buy
+			  int hp = propertyvalues[i][hprice]; //house price per
+			  if(hp != 0){
+			  cout<<"How many houses would you like to buy for " << b[i].sname << "for $" << hp << endl;
+			  cout<<"Enter a number 0-5, with 5 as a hotel." <<endl;
+			  cin >> h;
+			  p->debit(hp*h);
+			  b[i].numhouses += h;
+			  if(b[i].numhouses > 4){
+			      b[i].numhouses = 0;
+			      b[i].numhotels = 1;
+			  }
+			  }
+		      }
+		  }
+	      }
+	      }
+	      else{
+		  //cpufunction
+		  for(int i = 0; i<40; i++){
+		      if(b[i].owner == p){
+			  int h = 0;                          //num houses to buy
+			  int hp = propertyvalues[i][hprice]; //house price per
+			  if(hp != 0){
+			      if(p->getbal() >= 5*hp){h = 1;
+				  p->debit(hp*h);
+				  cout<<p->getname()<<" bought a house"<<endl;
+				  b[i].numhouses += h;
+				  if(b[i].numhouses > 4){
+				      b[i].numhouses = 0;
+				      b[i].numhotels = 1;}
+			      }
+			  }
+		      }
+		  }
+	      }
+	      return;
+	  }
 
-                                  void payUtilities(int s, Player * p){
-                                      int currspace = p->getSpace();
-                                      int ownedRR = 0;  //utilities at 12 and 28  //rand(12) x 4 for one  x 10 for both
-                                      int amt = 0;
-                                      if((currspace == 12) || (currspace == 28)){
-                                          if(((currspace == 12) && (b[12].owner == b[28].owner)) || ((currspace == 28) && (b[12].owner == b[28].owner))){//owns both
-                                              amt = dice_roll() * 10;
-                                          }
-                                          else amt = dice_roll() * 4;
-                                      }
-                                      if((currspace == 5) || (currspace == 15) || (currspace == 25) || (currspace == 35)){
-                                          if(b[currspace].owner == b[5].owner){ownedRR+=1;}
-                                          if(b[currspace].owner == b[15].owner){ownedRR+=1;}
-                                          if(b[currspace].owner == b[25].owner){ownedRR+=1;}
-                                          if(b[currspace].owner == b[35].owner){ownedRR+=1;}
-                                          amt = ownedRR * 25;
-                                      }
-                                      p->debit(amt);
-                                      b[currspace].owner->deposit(amt);
-                                      cout << p->getname() << " paid " << b[currspace].owner->getname() << " $" << amt << endl;
-                                  }
+	  void payUtilities(int s, Player * p){
+	      int currspace = p->getSpace();
+	      int ownedRR = 0;  //utilities at 12 and 28  //rand(12) x 4 for one  x 10 for both
+	      int amt = 0;
+	      if((currspace == 12) || (currspace == 28)){
+		  if(((currspace == 12) && (b[12].owner == b[28].owner)) || ((currspace == 28) && (b[12].owner == b[28].owner))){//owns both
+		      amt = dice_roll() * 10;
+		  }
+		  else amt = dice_roll() * 4;
+	      }
+	      if((currspace == 5) || (currspace == 15) || (currspace == 25) || (currspace == 35)){
+		  if(b[currspace].owner == b[5].owner){ownedRR+=1;}
+		  if(b[currspace].owner == b[15].owner){ownedRR+=1;}
+		  if(b[currspace].owner == b[25].owner){ownedRR+=1;}
+		  if(b[currspace].owner == b[35].owner){ownedRR+=1;}
+		  amt = ownedRR * 25;
+	      }
+	      p->debit(amt);
+	      b[currspace].owner->deposit(amt);
+	      cout << p->getname() << " paid " << b[currspace].owner->getname() << " $" << amt << endl;
+	  }
 
-                              };
+      };
 
 
 
