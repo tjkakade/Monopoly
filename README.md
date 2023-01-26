@@ -1,5 +1,5 @@
 # MonopolyECE309
-Final group project for ECE 309, implementation for monopoly game in C++
+Final project for ECE 309, implementation for monopoly game in C++
 
 ## Game Description
 This project models the board game monopoly. Monopoly is a board game that can have up to 8 players, where the goal of the game is to travel around the board
@@ -29,7 +29,7 @@ unowned), buy a house/hotel for a property (if they own all properties of that c
 property they landed on if they don't want to buy it.
 
 ## Changes Made
-In our version of monopoly we changed several things to get the project done in a more timely and simple manner. These are our changes:
+In this version of monopoly I changed several things to get the project done in a more timely and simple manner. These are the changes:
 
 1. There is no condition about owning all the colors of a properties type in order to buy houses/hotels for it. So, if a player owns a property they can immediately 
 buy houses/hotels for it.
@@ -45,12 +45,12 @@ buy houses/hotels for it.
 6. A player is not allowed to mortgage their properties on their turn, instead if they were to go bankrupt the player "sells" their properties back to the bank and is
 allowed to continue playing if they are no longer in debt. If they are still in debt then they are bankrupt and lose.
 
-7. We reduced the number of chance and community chest cards in the game from 32 total to 15, 10 chance and 5 community chest. We removed the "Get Out of Jail Free"
+7. I reduced the number of chance and community chest cards in the game from 32 total to 15, 10 chance and 5 community chest. I removed the "Get Out of Jail Free"
 card since JAIL no longer holds you for multiple turns and simply charges a fine. Community chest has cards that charge and gift money to the player, while chance has 
 those and movement cards.
 
 ## Recommended Software
-Our code can be compiled on windows and apple through Clion or any ide that supports C++. To compile the code you just need to download and use the game.cpp file, 
+The code can be compiled on windows and apple through Clion or any ide that supports C++. To compile the code you just need to download and use the game.cpp file, 
 which has the code for all of the features the game needs to run properly. This is the only file needed to run the game and play.
 
 ## Code Status and Interesting Features
