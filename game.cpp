@@ -15,11 +15,6 @@ string spacename[] = {"Go","Mediterranean Avenue","Community Chest","Baltic Aven
 #define spacenumber 0
 #define price       1 //price to buy property
 #define hprice      2 //price to buy house
-//#define rent      3 //rent
-//#define rent1     4 //rent with 1 house
-//#define rent2     5 //rent with 2 houses
-//#define rent3     6 //etc
-//#define rent4     7 //etc
 #define rent5       8 //rent with hotel
 #define mortgage    9 //mortgage
 int propertyvalues[40][10] = {{0,0,0,0,0,0,0,0,0},                              //go
