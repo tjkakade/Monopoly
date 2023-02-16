@@ -1,5 +1,5 @@
 # Monopoly
-Monopoly game implementation project.
+Monopoly game implementation, utilizing a singly linked list to travers the board with player and CPU objects.
 
 ## Game Description
 This project models the board game monopoly. Monopoly is a board game that can have up to 8 players, where the goal of the game is to travel around the board
